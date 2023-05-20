@@ -1,28 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { signIn, signOut } from 'next-auth/react'
-import { SolanaWalletProvider } from '@/components/solana-wallet-provider'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { useRouter } from 'next/navigation'
-import { User } from '@prisma/client'
 import Bio from '@/components/bio'
 import { RecentDonateItem } from '@/components/recent-donate-item'
+import { SolanaWalletProvider } from '@/components/solana-wallet-provider'
 import TopDonateItem from '@/components/top-donate-item'
-import { LogOut, Settings, User2 } from 'lucide-react'
 import { UserOwner } from '@/types/user-owner'
+import { LogOut, Settings, User2 } from 'lucide-react'
+import { signIn, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface Props {
   user?: UserOwner | null
 }
 
 export default function Sample({ user }: Props) {
-  const [domLoaded, setDomLoaded] = useState(false)
-
-  useEffect(() => {
-    setDomLoaded(true)
-  }, [])
-
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 

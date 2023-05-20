@@ -4,13 +4,13 @@ import useCopyToClipboard from '@/hooks/useCopyToClipboard'
 import { UpdateUser } from '@/types/update-user'
 import { UserOwner } from '@/types/user-owner'
 import { truncatePubkey } from '@/utils/truncate-pubkey'
-import { User } from '@prisma/client'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import axios from 'axios'
 import Avatar from 'boring-avatars'
 import { Copy, Edit2 } from 'lucide-react'
 import { useState } from 'react'
+import { DonateModal } from './donate-modal'
 
 interface BioProps {
   currentUser: UserOwner | null
@@ -24,6 +24,7 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState<UserOwner | null>(currentUser)
   const [isModal, setIsModal] = useState(false)
+  const [isDonateModal, setIsDonateModal] = useState(false)
 
   const handleChangeBio = async () => {
     if (!user) return
@@ -36,7 +37,8 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
         walletAddress: publicKey,
       })
       const data = bio.data
-      setUser(() => ({ ...user, data }))
+      console.log(data)
+      setUser(data as UserOwner)
     } catch (error) {
       console.log(error)
     } finally {
@@ -59,7 +61,7 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
           </div>
         </div>
 
-        <h2 className=' font-semibold text-2xl mt-7'>{user?.name}</h2>
+        <h2 className=' font-semibold text-2xl mt-7'>{user?.name ? user?.name : user?.walletAddress}</h2>
 
         {user?.walletAddress ? (
           <div className='flex justify-center gap-2 items-center'>
@@ -81,54 +83,63 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
           </button>
         ) : (
           <div className='flex gap-2 mt-2'>
-            <button className='btn btn-primary'>Donate</button>
+            <button className='btn btn-primary' onClick={() => setIsDonateModal(true)}>
+              Donate
+            </button>
             <button className='btn btn-secondary'>Join</button>
           </div>
         )}
       </div>
 
-      <>
-        <input type='checkbox' id='my-modal' className='modal-toggle' />
-        <label htmlFor='my-modal' className={`modal cursor-pointer ${isModal ? 'modal-open' : ''} `}>
-          <label className='modal-box relative' htmlFor=''>
-            <label htmlFor='my-modal' className='btn btn-sm btn-circle absolute right-2 top-2'>
-              ✕
-            </label>
-            <h3 className='text-lg font-bold'>Edit Profile</h3>
-            <input
-              type='text'
-              placeholder='Type here'
-              defaultValue={user ? (user.name as string) : ''}
-              onChange={(e) => setUsername(e.target.value)}
-              className='mt-4 input input-bordered w-full'
-            />
-
-            {user?.walletAddress || publicKey ? (
+      {isDonate && user ? (
+        <DonateModal
+          toName={user.name}
+          toWallet={user.walletAddress}
+          setModal={setIsDonateModal}
+          isModal={isDonateModal}
+        />
+      ) : (
+        <>
+          <input type='checkbox' id='my-modal' className='modal-toggle' />
+          <label htmlFor='my-modal' className={`modal cursor-pointer ${isModal ? 'modal-open' : ''} `}>
+            <label className='modal-box relative' htmlFor=''>
+              <button className='btn btn-sm btn-circle absolute right-2 top-2'>✕</button>
+              <h3 className='text-lg font-bold'>Edit Profile</h3>
               <input
                 type='text'
                 placeholder='Type here'
-                disabled
-                value={publicKey?.toString()}
+                defaultValue={user ? (user.name as string) : ''}
                 onChange={(e) => setUsername(e.target.value)}
                 className='mt-4 input input-bordered w-full'
               />
-            ) : (
-              <WalletMultiButton className='mt-4' />
-            )}
 
-            <p className='py-4 text-sm opacity-50 font-normal'>
-              {user?.walletAddress
-                ? 'Your fans will find you by your wallet address'
-                : 'By click the Create Donate Account, you agree to our Teams and Conditions'}
-            </p>
-            <div className='modal-action'>
-              <button className='btn btn-primary w-full' onClick={handleChangeBio} disabled={isLoading}>
-                {!isLoading ? (user?.walletAddress ? 'Save change' : 'Create Donate Account') : 'Crafting...'}
-              </button>
-            </div>
+              {user?.walletAddress || publicKey ? (
+                <input
+                  type='text'
+                  placeholder='Type here'
+                  disabled
+                  value={publicKey?.toString()}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className='mt-4 input input-bordered w-full'
+                />
+              ) : (
+                <WalletMultiButton className='mt-4' />
+              )}
+
+              <p className='py-4 text-sm opacity-50 font-normal'>
+                {user?.walletAddress
+                  ? 'Your fans will find you by your wallet address'
+                  : 'By click the Create Donate Account, you agree to our Teams and Conditions'}
+              </p>
+              <div className='modal-action'>
+                <button className='btn btn-primary w-full' onClick={handleChangeBio} disabled={isLoading}>
+                  {!isLoading ? (user?.walletAddress ? 'Save change' : 'Create Donate Account') : 'Crafting...'}
+                </button>
+              </div>
+            </label>
           </label>
-        </label>
-      </>
+        </>
+      )}
     </div>
   )
 }

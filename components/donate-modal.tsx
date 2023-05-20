@@ -1,25 +1,80 @@
 'use client'
 
-import React from 'react'
+import { CreateDonate } from '@/types/create-donate'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
-export function DonateModal() {
+interface DonateModalProps {
+  toWallet: string | null
+  toName: string | null
+  isModal: boolean
+  setModal: Dispatch<SetStateAction<boolean>>
+}
+
+export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModalProps) {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [amount, setAmount] = useState(0)
+  const [message, setMessage] = useState('')
+
+  const createSession = async () => {
+    if (amount <= 0) {
+      setModal(false)
+
+      return
+    }
+
+    setIsLoading(true)
+    console.log(toWallet)
+    const response = await axios.post<CreateDonate>('/api/candypay', {
+      amount,
+      wallet: toWallet,
+      to: toName,
+      image: `abc`,
+      current_url: window.location.href,
+    })
+
+    const data = response.data
+
+    if (data && data.payment_url) {
+      router.push(data.payment_url)
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
-      <input type='checkbox' id='my-modal' className='modal-toggle' />
-      <label htmlFor='my-modal' className='modal cursor-pointer'>
-        <label className='modal-box relative' htmlFor=''>
-          <label htmlFor='my-modal' className='btn btn-sm btn-circle absolute right-2 top-2'>
+      <input type='checkbox' id='donate-modal' className='modal-toggle' />
+      <label htmlFor='donate-modal' className={`modal cursor-pointer ${isModal ? 'modal-open' : ''}`}>
+        <label className='modal-box relative'>
+          <button onClick={() => setModal(false)} className='btn btn-sm btn-circle absolute right-2 top-2 select-none'>
             ✕
+          </button>
+          <h3 className='text-lg font-bold'>Donate for {toName}</h3>
+          <label className='label'>
+            <span className='label-text'>Amount in SOL</span>
           </label>
-          <h3 className='text-lg font-bold'>Edit Profile</h3>
-          <input type='text' placeholder='Type here' className='mt-4 input input-bordered w-full' />
-          <p className='py-4'>
-            You&apos;ve been selected for a chance to get one year of subscription to use Wikipedia for free!
+          <input
+            type='number'
+            placeholder='1 SOL'
+            onChange={(e) => setAmount(e.target.valueAsNumber)}
+            className='input input-bordered w-full '
+          />
+          <label className='label'>
+            <span className='label-text'>Message</span>
+          </label>
+          <textarea
+            className='textarea textarea-bordered h-24 w-full'
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="What's your confess?"></textarea>
+          <p className='py-4 text-sm opacity-50 font-normal'>
+            Your message will pop up in the screen if {toName} is streaming
           </p>
           <div className='modal-action'>
-            <label htmlFor='my-modal' className='btn btn-primary w-full'>
-              Save change
-            </label>
+            <button disabled={isLoading} className='btn btn-primary w-full' onClick={createSession}>
+              {amount > 0 ? (isLoading ? 'Crafting...' : 'Donate') : 'Cancel'}
+            </button>
           </div>
         </label>
       </label>

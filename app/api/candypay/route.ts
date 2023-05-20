@@ -1,22 +1,32 @@
 import CandyPaySDK from '@/configs/candypay'
+import { CreateDonate } from '@/types/create-donate'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request, res: Response) {
+  const body: CreateDonate = await req.json()
+
+  const { amount, wallet, to, image, current_url } = body
+
+  // if (amount || wallet || to || image || current_url) return NextResponse.error()
+
   try {
     const response = await CandyPaySDK.session.create({
-      success_url: '', // TODO: create success page
-      cancel_url: '/', // TODO: create cancel page
-      tokens: ['bonk', 'samo'],
+      success_url: current_url!,
+      cancel_url: current_url!,
       items: [
         {
           name: 'Sample Donate',
-          price: 0.1,
+          price: amount,
           image: 'https://imgur.com/M0l5SDh.png',
           quantity: 1,
-          size: '9',
         },
       ],
-      shipping_fees: 0.5,
+      shipping_fees: (amount * 5) / 100,
+      custom_data: {
+        name: 'User A',
+        image: 'https://i.ibb.co/chtf9qc/2691.png',
+        wallet_address: 'GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ',
+      },
     })
 
     return NextResponse.json(response)
