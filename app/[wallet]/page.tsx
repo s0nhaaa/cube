@@ -1,22 +1,15 @@
 import Bio from '@/components/bio'
-import TopDonateItem from '@/components/top-donate-item'
-import Avatar from 'boring-avatars'
-import { Metadata, ResolvingMetadata } from 'next'
-import getUserByWallet from '../actions/getUserByWallet'
 import { SolanaWalletProvider } from '@/components/solana-wallet-provider'
+import TopDonateItem from '@/components/top-donate-item'
 import { MEMBERS, TOP_DONATE } from '@/configs/dummy-data'
+import Avatar from 'boring-avatars'
+import getUserByWallet from '../actions/getUserByWallet'
 
 type Props = {
-  params: { user: string }
+  params: { wallet: string }
 }
 
-export async function generateMetadata({ params }: Props, parent?: ResolvingMetadata): Promise<Metadata> {
-  return {
-    title: params.user,
-  }
-}
-
-export default async function Page({ params }: { params: { wallet: string } }) {
+export default async function Page({ params }: Props) {
   const user = await getUserByWallet({ wallet: params.wallet })
 
   return (
