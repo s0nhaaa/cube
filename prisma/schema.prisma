@@ -42,3 +42,13 @@ model Account {
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
+
+model Donations {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  from    String
+  to      String
+  message String
+  amount  String
+
+  @@map("donations")
+}
