@@ -37,7 +37,6 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
         walletAddress: publicKey || user.walletAddress,
       })
       const data = bio.data
-      console.log(data)
       setUser(data as UserOwner)
     } catch (error) {
       console.log(error)
@@ -54,7 +53,7 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
           <div className='w-24 rounded-full'>
             <Avatar
               size={98}
-              name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
+              name={(user?.walletAddress as string) || publicKey?.toString()}
               variant='beam'
               colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
             />

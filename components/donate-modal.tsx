@@ -31,7 +31,7 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
       amount,
       wallet: toWallet,
       to: toName,
-      image: `abc`,
+      image: `https://source.boringavatars.com/beam/80/${toWallet}?colors=92a1c6,146a7c,F0ab3d,c271b4,c20d90`,
       current_url: window.location.href,
     })
 
@@ -53,11 +53,11 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
           </button>
           <h3 className='text-lg font-bold'>Donate for {toName}</h3>
           <label className='label'>
-            <span className='label-text'>Amount in SOL</span>
+            <span className='label-text'>Amount in USD</span>
           </label>
           <input
             type='number'
-            placeholder='1 SOL'
+            placeholder='1 USD'
             onChange={(e) => setAmount(e.target.valueAsNumber)}
             className='input input-bordered w-full '
           />

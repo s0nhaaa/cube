@@ -7,25 +7,23 @@ export async function POST(req: Request, res: Response) {
 
   const { amount, wallet, to, image, current_url } = body
 
-  // if (amount || wallet || to || image || current_url) return NextResponse.error()
-
   try {
     const response = await CandyPaySDK.session.create({
       success_url: current_url!,
       cancel_url: current_url!,
       items: [
         {
-          name: 'Sample Donate',
+          name: 'Money Donate',
           price: amount,
-          image: 'https://imgur.com/M0l5SDh.png',
+          image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg',
           quantity: 1,
         },
       ],
       shipping_fees: (amount * 5) / 100,
       custom_data: {
-        name: 'User A',
-        image: 'https://i.ibb.co/chtf9qc/2691.png',
-        wallet_address: 'GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ',
+        name: `Donation for ${to}`,
+        image: image,
+        wallet_address: wallet,
       },
     })
 
