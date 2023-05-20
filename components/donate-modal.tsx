@@ -17,6 +17,7 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
   const [isLoading, setIsLoading] = useState(false)
   const [amount, setAmount] = useState(0)
   const [message, setMessage] = useState('')
+  const [from, setFrom] = useState('')
 
   const createSession = async () => {
     if (amount <= 0) {
@@ -32,6 +33,8 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
       to: toName,
       image: `https://source.boringavatars.com/beam/80/${toWallet}?colors=92a1c6,146a7c,F0ab3d,c271b4,c20d90`,
       current_url: window.location.href,
+      from,
+      message,
     })
 
     const data = response.data
@@ -48,6 +51,15 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
             ✕
           </button>
           <h3 className='text-lg font-bold'>Donate for {toName}</h3>
+          <label className='label'>
+            <span className='label-text'>Your name</span>
+          </label>
+          <input
+            type='text'
+            placeholder='Your display name'
+            onChange={(e) => setFrom(e.target.value)}
+            className='input input-bordered w-full '
+          />
           <label className='label'>
             <span className='label-text'>Amount in USD</span>
           </label>

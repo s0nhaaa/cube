@@ -5,4 +5,6 @@ export type CreateDonate = {
   image: string
   payment_url?: string
   current_url?: string
+  from: string
+  message: string
 }
