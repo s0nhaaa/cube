@@ -1,6 +1,8 @@
 'use client'
 
 import { EditUserModal } from '@/components/edit-user-modal'
+import useCopyToClipboard from '@/hooks/useCopyToClipboard'
+import { truncatePubkey } from '@/utils/truncate-pubkey'
 import Avatar from 'boring-avatars'
 import { Copy, Edit2, Settings, User2 } from 'lucide-react'
 import { Metadata, ResolvingMetadata } from 'next'
@@ -16,6 +18,8 @@ export async function generateMetadata({ params }: Props, parent?: ResolvingMeta
 }
 
 export default function Page({ params }: { params: { user: string } }) {
+  const [state, copyToClipboard] = useCopyToClipboard()
+
   return (
     <>
       <EditUserModal />
@@ -38,10 +42,12 @@ export default function Page({ params }: { params: { user: string } }) {
                 <h2 className=' font-semibold text-2xl mt-7'>{params.user}</h2>
                 <div className='flex justify-center gap-2 items-center'>
                   <h3 className=' font-normal text-lg mt-1 text-neutral-content '>
-                    GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ
+                    {truncatePubkey('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ')}
                   </h3>
                   <div className='tooltip' data-tip='Copy'>
-                    <button className='btn btn-sm btn-square'>
+                    <button
+                      className='btn btn-sm btn-square'
+                      onClick={() => copyToClipboard('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ')}>
                       <Copy size={16} />
                     </button>
                   </div>
@@ -75,8 +81,8 @@ export default function Page({ params }: { params: { user: string } }) {
                       .map((_, index) => (
                         <tr key={index}>
                           <th>
-                            <div className='flex justify-center '>
-                              <label className='text-center m-auto'>1</label>
+                            <div className='flex justify-center max-w-[50px] '>
+                              <label className={`text-center m-auto`}>{index + 1}</label>
                             </div>
                           </th>
                           <td>
@@ -92,13 +98,17 @@ export default function Page({ params }: { params: { user: string } }) {
                                 </div>
                               </div>
                               <div>
-                                GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ
+                                s0nhaaa
                                 <div className='tooltip' data-tip='Copy'>
-                                  <button className='btn btn-sm btn-square ml-2'>
+                                  <button
+                                    className='btn btn-sm btn-square ml-2'
+                                    onClick={() => copyToClipboard('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ')}>
                                     <Copy size={16} />
                                   </button>
                                 </div>
-                                <div className='text-sm opacity-50'>United States</div>
+                                <div className='text-sm opacity-50'>
+                                  {truncatePubkey('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ', 8)}
+                                </div>
                               </div>
                             </div>
                           </td>
