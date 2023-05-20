@@ -6,14 +6,21 @@ import Avatar from 'boring-avatars'
 import { Copy } from 'lucide-react'
 import React from 'react'
 
-export default function TopDonateItem() {
+interface TopDonateItemProps {
+  rank: number
+  walletAddress: string
+  name: string
+  total: number
+}
+
+export default function TopDonateItem(props: TopDonateItemProps) {
   const [state, copyToClipboard] = useCopyToClipboard()
 
   return (
     <tr>
       <th>
         <div className='flex justify-center max-w-[50px] '>
-          <label className={`text-center m-auto`}>1</label>
+          <label className={`text-center m-auto`}>{props.rank}</label>
         </div>
       </th>
       <td>
@@ -22,28 +29,24 @@ export default function TopDonateItem() {
             <div className=' w-12 h-12'>
               <Avatar
                 size={44}
-                name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
+                name={props.walletAddress}
                 variant='beam'
                 colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
               />
             </div>
           </div>
           <div>
-            s0nhaaa
+            {props.name}
             <div className='tooltip' data-tip='Copy'>
-              <button
-                className='btn btn-sm btn-square ml-2'
-                onClick={() => copyToClipboard('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ')}>
+              <button className='btn btn-sm btn-square ml-2' onClick={() => copyToClipboard(props.walletAddress)}>
                 <Copy size={16} />
               </button>
             </div>
-            <div className='text-sm opacity-50'>
-              {truncatePubkey('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ', 8)}
-            </div>
+            <div className='text-sm opacity-50'>{truncatePubkey(props.walletAddress, 8)}</div>
           </div>
         </div>
       </td>
-      <td>100 SOL</td>
+      <td>{props.total} SOL</td>
     </tr>
   )
 }

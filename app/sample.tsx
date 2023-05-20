@@ -1,9 +1,11 @@
 'use client'
 
 import Bio from '@/components/bio'
+import BottomNavBar from '@/components/bottom-nav-bar'
 import { RecentDonateItem } from '@/components/recent-donate-item'
 import { SolanaWalletProvider } from '@/components/solana-wallet-provider'
 import TopDonateItem from '@/components/top-donate-item'
+import { RECENT_DONATE, TOP_DONATE } from '@/configs/dummy-data'
 import { UserOwner } from '@/types/user-owner'
 import { LogOut, Settings, User2 } from 'lucide-react'
 import { signIn, signOut } from 'next-auth/react'
@@ -60,11 +62,15 @@ export default function Sample({ user }: Props) {
                           </tr>
                         </thead>
                         <tbody>
-                          {Array(5)
-                            .fill(0)
-                            .map((_, index) => (
-                              <TopDonateItem key={index} />
-                            ))}
+                          {TOP_DONATE.sort((a, b) => b.total - a.total).map((user, index) => (
+                            <TopDonateItem
+                              total={user.total}
+                              key={user.id}
+                              rank={index + 1}
+                              name={user.name}
+                              walletAddress={user.walletAddress}
+                            />
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -75,11 +81,15 @@ export default function Sample({ user }: Props) {
                       <h3 className=' font-semibold text-lg'>Recent Donates</h3>
                     </div>
                     <div className='w-full mt-3'>
-                      {Array(10)
-                        .fill(0)
-                        .map((_, index) => (
-                          <RecentDonateItem key={index} />
-                        ))}
+                      {RECENT_DONATE.map((user) => (
+                        <RecentDonateItem
+                          message={user.message}
+                          key={user.id}
+                          total={user.total}
+                          name={user.name}
+                          walletAddress={user.walletAddress}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -87,14 +97,7 @@ export default function Sample({ user }: Props) {
                 <div className=' h-20 w-10'></div>
               </section>
 
-              <div className=' z-10 rounded-full btn-group fixed bottom-4 left-[50%] translate-x-[-50%] '>
-                <button className='btn btn-circle'>
-                  <User2 size={20} />
-                </button>
-                <button className='btn btn-circle'>
-                  <Settings size={20} />
-                </button>
-              </div>
+              <BottomNavBar />
             </div>
           </>
         ) : (

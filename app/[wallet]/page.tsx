@@ -4,6 +4,7 @@ import Avatar from 'boring-avatars'
 import { Metadata, ResolvingMetadata } from 'next'
 import getUserByWallet from '../actions/getUserByWallet'
 import { SolanaWalletProvider } from '@/components/solana-wallet-provider'
+import { MEMBERS, TOP_DONATE } from '@/configs/dummy-data'
 
 type Props = {
   params: { user: string }
@@ -30,39 +31,22 @@ export default async function Page({ params }: { params: { wallet: string } }) {
                 <h3 className=' font-semibold text-lg'>Members</h3>
               </div>
               <div className='avatar-group -space-x-6'>
-                <div className='avatar'>
-                  <div className='w-12'>
-                    <Avatar
-                      size={44}
-                      name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
-                      variant='beam'
-                      colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
-                    />
+                {MEMBERS.map((user) => (
+                  <div className='avatar' key={user.id}>
+                    <div className='w-12'>
+                      <Avatar
+                        size={44}
+                        name={user.walletAddress}
+                        variant='beam'
+                        colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className='avatar'>
-                  <div className='w-12'>
-                    <Avatar
-                      size={44}
-                      name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
-                      variant='beam'
-                      colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
-                    />
-                  </div>
-                </div>
-                <div className='avatar'>
-                  <div className='w-12'>
-                    <Avatar
-                      size={44}
-                      name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
-                      variant='beam'
-                      colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
-                    />
-                  </div>
-                </div>
+                ))}
+
                 <div className='avatar placeholder'>
                   <div className='w-12 bg-neutral-focus text-neutral-content'>
-                    <span>+99</span>
+                    <span>+12</span>
                   </div>
                 </div>
               </div>
@@ -85,16 +69,22 @@ export default async function Page({ params }: { params: { wallet: string } }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {Array(5)
-                      .fill(0)
-                      .map((_, index) => (
-                        <TopDonateItem key={index} />
-                      ))}
+                    {TOP_DONATE.sort((a, b) => b.total - a.total).map((user, index) => (
+                      <TopDonateItem
+                        total={user.total}
+                        key={user.id}
+                        rank={index + 1}
+                        name={user.name}
+                        walletAddress={user.walletAddress}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
+
+          <div className=' h-20 w-10'></div>
         </section>
       </div>
     </SolanaWalletProvider>
