@@ -34,7 +34,7 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
       const bio = await axios.put<UpdateUser>('/api/bio', {
         id: user.id,
         name: username,
-        walletAddress: publicKey,
+        walletAddress: publicKey || user.walletAddress,
       })
       const data = bio.data
       console.log(data)
