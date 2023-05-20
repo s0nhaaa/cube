@@ -118,7 +118,7 @@ export default function Bio({ currentUser, isDonate = false }: BioProps) {
                   type='text'
                   placeholder='Type here'
                   disabled
-                  value={publicKey?.toString()}
+                  value={publicKey?.toString() || (user?.walletAddress as string)}
                   onChange={(e) => setUsername(e.target.value)}
                   className='mt-4 input input-bordered w-full'
                 />
