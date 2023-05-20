@@ -26,7 +26,6 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
     }
 
     setIsLoading(true)
-    console.log(toWallet)
     const response = await axios.post<CreateDonate>('/api/candypay', {
       amount,
       wallet: toWallet,
@@ -37,10 +36,7 @@ export function DonateModal({ toWallet, toName, setModal, isModal }: DonateModal
 
     const data = response.data
 
-    if (data && data.payment_url) {
-      router.push(data.payment_url)
-      setIsLoading(false)
-    }
+    if (data && data.payment_url) router.push(data.payment_url)
   }
 
   return (
