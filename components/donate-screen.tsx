@@ -31,14 +31,30 @@ export default function DonateScreen({ currentUser }: DonateScreenProps) {
 
   return (
     <>
-      {currentUser && <span className=' text-3xl '>Some one just donate for you {currentUser.name}</span>}
-
       {events.map((e, i) => (
-        <div key={i}>
-          <p>{e.operationType}</p>
-          <p>{e.documentKey._id.toString()}</p>
-          <p>{JSON.stringify(e.fullDocument)}</p>
-        </div>
+        <>
+          {e.fullDocument.to === currentUser?.walletAddress ? (
+            <div key={i} className='w-full flex items-center flex-col justify-center'>
+              <img
+                src='https://media2.giphy.com/media/LdOyjZ7io5Msw/giphy.gif?cid=ecf05e47nbae4sp8ovjcbl98x55nl25p8r5uu7w78j6j312d&ep=v1_gifs_search&rid=giphy.gif&ct=g'
+                alt='Illu'
+                width={200}
+                height={200}
+              />
+              <span className=' text-3xl '>
+                <span className=' text-3xl font-semibold text-yellow-300'>{e.fullDocument.from}</span> just donate{' '}
+                {e.fullDocument.amount} USD
+              </span>
+              <div className='flex items-center flex-col justify-center'>
+                <p className=' text-3xl '>with message</p>
+                <br />
+                <p className=' text-3xl '>&quot;{e.fullDocument.message}&quot;</p>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       ))}
     </>
   )
