@@ -1,5 +1,5 @@
 import Avatar from 'boring-avatars'
-import { Copy, Edit2, User2, Settings } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import { Metadata, ResolvingMetadata } from 'next'
 
 type Props = {

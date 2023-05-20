@@ -1,0 +1,49 @@
+'use client'
+
+import useCopyToClipboard from '@/hooks/useCopyToClipboard'
+import { truncatePubkey } from '@/utils/truncate-pubkey'
+import Avatar from 'boring-avatars'
+import { Copy } from 'lucide-react'
+import React from 'react'
+
+export default function TopDonateItem() {
+  const [state, copyToClipboard] = useCopyToClipboard()
+
+  return (
+    <tr>
+      <th>
+        <div className='flex justify-center max-w-[50px] '>
+          <label className={`text-center m-auto`}>1</label>
+        </div>
+      </th>
+      <td>
+        <div className='flex items-center space-x-3'>
+          <div className='avatar'>
+            <div className=' w-12 h-12'>
+              <Avatar
+                size={44}
+                name='GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ'
+                variant='beam'
+                colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
+              />
+            </div>
+          </div>
+          <div>
+            s0nhaaa
+            <div className='tooltip' data-tip='Copy'>
+              <button
+                className='btn btn-sm btn-square ml-2'
+                onClick={() => copyToClipboard('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ')}>
+                <Copy size={16} />
+              </button>
+            </div>
+            <div className='text-sm opacity-50'>
+              {truncatePubkey('GNQPsZvxsCuniSfcwE4oG95aD2qi3VaXrFj1GcTHmLfZ', 8)}
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>100 SOL</td>
+    </tr>
+  )
+}

@@ -1,7 +1,8 @@
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth/next'
 
 import prisma from '@/libs/prismadb'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { UserOwner } from '@/types/user-owner'
 
 export async function getSession() {
   return await getServerSession(authOptions)
@@ -21,7 +22,7 @@ export default async function getCurrentUser() {
 
     if (!currentUser) return null
 
-    return currentUser
+    return { ...currentUser, isOwner: true } as UserOwner
   } catch (error) {
     return null
   }
